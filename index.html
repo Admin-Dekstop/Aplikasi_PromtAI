@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Forge</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    #output {
+      margin-top: 20px;
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Prompt Forge 🧠</h2>
+  <label>Platform Tujuan</label>
+  <select id="platform">
+    <option value="ChatGPT">ChatGPT</option>
+    <option value="Gemini">Gemini</option>
+    <option value="Blackbox">Blackbox</option>
+    <option value="Claude">Claude</option>
+  </select>
+
+  <label>Tujuan Prompt</label>
+  <input type="text" id="goal" placeholder="Contoh: Buat video edukatif, artikel ilmiah, dll">
+
+  <label>Topik Utama</label>
+  <input type="text" id="topic" placeholder="Contoh: Revolusi Industri 4.0">
+
+  <label>Gaya Bahasa</label>
+  <input type="text" id="style" placeholder="Contoh: Ilmiah, Santai, Naratif, Lucu">
+
+  <label>Format Output</label>
+  <input type="text" id="format" placeholder="Contoh: Artikel, Video Script, Kode Python, dsb.">
+
+  <button onclick="generatePrompt()">🔮 Buat Prompt</button>
+
+  <div id="output"></div>
+  <button onclick="copyPrompt()">📋 Copy Prompt</button>
+
+  <script>
+    function generatePrompt() {
+      const platform = document.getElementById('platform').value;
+      const goal = document.getElementById('goal').value;
+      const topic = document.getElementById('topic').value;
+      const style = document.getElementById('style').value;
+      const format = document.getElementById('format').value;
+
+      const prompt = `Anda adalah asisten AI di platform ${platform}. Buatlah output sesuai perintah berikut:
+Topik: "${topic}"
+Gaya bahasa: ${style}
+Format output: ${format}
+Tujuan pengguna: ${goal}
+Pastikan hasil sesuai dengan karakteristik platform ${platform} dan memenuhi kebutuhan pengguna.`;
+
+      document.getElementById('output').innerText = prompt;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('output').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Prompt berhasil disalin ke clipboard! 🎉");
+      });
+    }
+  </script>
+</body>
+</html>
