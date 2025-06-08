@@ -1,102 +1,157 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prompt Forge - AI Prompt Builder</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Forge - Tool Pembuat Prompt AI</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #222;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      width: 100%;
+      font-size: 1rem;
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #output {
+      margin-top: 1.5rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 p-4">
-  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6 mt-6">
-    <h1 class="text-2xl font-bold text-center text-blue-700 mb-6">🧠 Prompt Forge - AI Prompt Builder</h1>
+<body>
+  <div class="container">
+    <h2>Prompt Forge 🧠</h2>
 
-    <!-- Pilih Role -->
-    <div class="mb-4">
-      <label class="font-semibold">Peran AI</label>
-      <select id="role" onchange="showForm()" class="w-full mt-1 border rounded-lg p-2">
-        <option value="">-- Pilih Peran --</option>
-        <option>Asisten Penulis</option>
-        <option>Content Creator</option>
-        <option>Dosen Virtual</option>
-        <option>AI Developer Assistant</option>
-        <option>Canva Prompt Expert</option>
-      </select>
+    <label for="platform">Platform Tujuan</label>
+    <select id="platform" onchange="handleSelection()">
+      <option value="ChatGPT">ChatGPT</option>
+      <option value="Gemini">Gemini</option>
+      <option value="Blackbox">Blackbox</option>
+      <option value="Claude">Claude</option>
+      <option value="Canva">Canva</option>
+    </select>
+
+    <label for="role">Peran AI</label>
+    <select id="role" onchange="handleSelection()">
+      <option value="Asisten Penulis">Asisten Penulis</option>
+      <option value="Content Creator">Content Creator</option>
+      <option value="Dosen Virtual">Dosen Virtual</option>
+      <option value="AI Developer Assistant">AI Developer Assistant</option>
+      <option value="Canva Prompt Expert">Canva Prompt Expert</option>
+    </select>
+
+    <label for="goal">Tujuan Prompt</label>
+    <input type="text" id="goal" placeholder="Misal: Buat artikel ilmiah, video edukasi, script coding, dsb">
+
+    <label for="topic">Topik Utama</label>
+    <input type="text" id="topic" placeholder="Misal: Energi Terbarukan">
+
+    <label for="style">Gaya Bahasa</label>
+    <input type="text" id="style" placeholder="Misal: Ilmiah, Persuasif, Ringan, Kreatif">
+
+    <label for="format">Format Output</label>
+    <input type="text" id="format" placeholder="Misal: Artikel, Markdown, JSON, Video Script">
+
+    <label for="length">Panjang / Durasi Output</label>
+    <input type="text" id="length" placeholder="Misal: 500 kata, 2 menit, 5 slide">
+
+    <label for="audience">Target Audiens</label>
+    <input type="text" id="audience" placeholder="Misal: Umum, Mahasiswa, Anak-anak, Profesional">
+
+    <div id="langprogField" class="hidden">
+      <label for="langprog">Bahasa Pemrograman (jika coding)</label>
+      <input type="text" id="langprog" placeholder="Misal: Python, JavaScript, C++">
     </div>
 
-    <!-- Form Utama (disembunyikan dulu) -->
-    <div id="mainForm" class="space-y-4 hidden">
-      <div>
-        <label class="font-semibold">Platform Tujuan</label>
-        <select id="platform" class="w-full mt-1 border rounded-lg p-2">
-          <option>ChatGPT</option>
-          <option>Gemini</option>
-          <option>Blackbox</option>
-          <option>Claude</option>
-          <option>Canva</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-semibold">Tujuan Prompt</label>
-        <input id="goal" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Buat artikel, script, dsb"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Topik Utama</label>
-        <input id="topic" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Energi Terbarukan"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Gaya Bahasa</label>
-        <input id="style" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Ilmiah, Kreatif"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Format Output</label>
-        <input id="format" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Artikel, JSON, Markdown"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Panjang / Durasi Output</label>
-        <input id="length" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: 500 kata, 2 menit"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Target Audiens</label>
-        <input id="audience" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Umum, Mahasiswa"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Bahasa Pemrograman (jika coding)</label>
-        <input id="langprog" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Python, JS"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Gaya Visual (khusus Canva)</label>
-        <input id="visualstyle" type="text" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Minimalis, Bold"/>
-      </div>
-
-      <div>
-        <label class="font-semibold">Tambahan Khusus</label>
-        <textarea id="extras" rows="3" class="w-full mt-1 border rounded-lg p-2" placeholder="Contoh: Sertakan referensi, tambahkan contoh"></textarea>
-      </div>
-
-      <button onclick="generatePrompt()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">🔮 Buat Prompt</button>
-
-      <div id="output" class="mt-4 whitespace-pre-wrap bg-gray-100 p-4 rounded-lg text-sm font-mono border"></div>
-
-      <button onclick="copyPrompt()" class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg">📋 Salin Prompt</button>
+    <div id="visualstyleField" class="hidden">
+      <label for="visualstyle">Gaya Visual (khusus Canva)</label>
+      <input type="text" id="visualstyle" placeholder="Misal: Minimalis, Bold, Elegan">
     </div>
+
+    <label for="extras">Tambahan Khusus (opsional)</label>
+    <textarea id="extras" rows="3" placeholder="Misal: Sertakan referensi, tambahkan contoh, format markdown, dsb."></textarea>
+
+    <button onclick="generatePrompt()">🔮 Buat Prompt</button>
+    <div id="output"></div>
+    <button onclick="copyPrompt()">📋 Salin Prompt</button>
   </div>
 
   <script>
-    function showForm() {
+    function handleSelection() {
       const role = document.getElementById('role').value;
-      const form = document.getElementById('mainForm');
-      if (role) {
-        form.classList.remove('hidden');
-      } else {
-        form.classList.add('hidden');
+      const platform = document.getElementById('platform').value;
+      const langprogField = document.getElementById('langprogField');
+      const visualstyleField = document.getElementById('visualstyleField');
+      const formatInput = document.getElementById('format');
+
+      langprogField.classList.add('hidden');
+      visualstyleField.classList.add('hidden');
+      formatInput.disabled = false;
+
+      if (role === 'AI Developer Assistant') {
+        langprogField.classList.remove('hidden');
+      } else if (role === 'Canva Prompt Expert') {
+        langprogField.classList.remove('hidden');
+        visualstyleField.classList.remove('hidden');
+      }
+
+      if (role === 'Content Creator' && platform === 'Gemini') {
+        formatInput.value = 'Video';
+        formatInput.disabled = true;
       }
     }
 
@@ -132,13 +187,9 @@
 
     function copyPrompt() {
       const text = document.getElementById('output').innerText;
-      if (text.trim()) {
-        navigator.clipboard.writeText(text).then(() => {
-          alert("Prompt berhasil disalin ke clipboard! 🎉");
-        });
-      } else {
-        alert("Belum ada prompt untuk disalin!");
-      }
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Prompt berhasil disalin ke clipboard! 🎉");
+      });
     }
   </script>
 </body>
