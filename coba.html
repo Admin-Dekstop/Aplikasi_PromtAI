@@ -1,425 +1,396 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prompt Forge - & Veo 3 Switcher</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prompt Forge</title>
+<style>
+  /* Reset & base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin:0; padding:1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    line-height: 1.5;
+  }
 
-  <!-- Style Kode 1 (Prompt Forge) -->
-  <style id="style-promptforge">
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f7fa;
-      margin: 0;
-      padding: 2rem;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #222;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      padding: 0.75rem;
-      width: 100%;
-      font-size: 1rem;
-      background: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    #output {
-      margin-top: 1.5rem;
-      background: #f0f0f0;
-      padding: 1rem;
-      border-radius: 8px;
-      white-space: pre-wrap;
-      font-family: monospace;
-    }
-    .hidden {
-      display: none;
-    }
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #777;
-    }
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem;
-      }
-    }
-  </style>
+  h1 {
+    text-align: center;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
 
-  <!-- Style Kode 2 (Veo 3) -->
-  <style id="style-veo3" disabled>
-    /* CSS Reset and Base Styles */
-    :root {
-      --bg-color: #121212;
-      --surface-color: #1e1e1e;
-      --primary-text: #e0e0e0;
-      --secondary-text: #a0a0a0;
-      --border-color: #383838;
-      --accent-color: #3b82f6; /* Blue */
-      --accent-hover: #2563eb;
-      --success-color: #16a34a;
-      --success-hover: #15803d;
+  form {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 1.6rem 2rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: #34495e;
+  }
+
+  select, input[type=text], textarea {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.25s ease;
+  }
+  select:focus, input[type=text]:focus, textarea:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 5px #2980b9aa;
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .row > div {
+    flex: 1 1 48%;
+  }
+  @media (max-width: 480px) {
+    .row > div {
+      flex-basis: 100%;
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--primary-text);
-      line-height: 1.6;
-      padding: 1rem;
-    }
-    .container-veo {
-      max-width: 1200px;
-      margin: 1rem auto;
-      background-color: var(--surface-color);
-      padding: clamp(1rem, 5vw, 2.5rem);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
-    header {
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    header h1 {
-      color: #ffffff;
-      font-weight: 700;
-      font-size: clamp(1.5rem, 5vw, 2.25rem);
-    }
-    header p {
-      color: var(--secondary-text);
-      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-      max-width: 600px;
-      margin: 0.5rem auto 0;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .form-group label {
-      font-weight: 600;
-      color: var(--secondary-text);
-    }
-    input[type="text"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background-color: #2a2a2a;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--primary-text);
-      font-size: 1rem;
-      font-family: 'Inter', sans-serif;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    input[type="text"]:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-    }
-    .actions {
-      text-align: center;
-      margin: 2.5rem 0;
-    }
-    button {
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.8rem 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    button:hover {
-      background-color: var(--accent-hover);
-      transform: translateY(-2px);
-    }
-    button:active {
-      transform: translateY(0);
-    }
-    .result-box {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    #output-prompt {
-      height: 300px;
-      white-space: pre-wrap;
-      resize: vertical;
-      line-height: 1.7;
-    }
-    #copy-btn {
-      background-color: var(--success-color);
-      align-self: flex-start;
-    }
-    #copy-btn:hover {
-      background-color: var(--success-hover);
-    }
-  </style>
+  }
+
+  .btn-group {
+    margin-top: 1.6rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  button {
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0.6rem 1.6rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #2980b9;
+    color: white;
+    box-shadow: 0 4px 12px rgb(41 128 185 / 0.4);
+    transition: background-color 0.3s ease;
+  }
+  button:hover, button:focus {
+    background-color: #1c5980;
+    outline: none;
+  }
+
+  #promptOutput {
+    margin-top: 2rem;
+    white-space: pre-wrap;
+    background: #eaf2f8;
+    padding: 1rem 1.3rem;
+    border-radius: 8px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1rem;
+    min-height: 80px;
+    user-select: text;
+    box-shadow: inset 0 0 5px #a6b8cc;
+  }
+
+</style>
 </head>
 <body>
 
-  <!-- Container Prompt Forge (Kode 1) -->
-  <div id="promptForgeContainer" class="container">
-    <h2>Prompt Forge 🧠</h2>
+<h1>Prompt Forge</h1>
 
-    <label for="platform">Platform Tujuan</label>
-    <select id="platform" onchange="handleSelection()">
-      <option value="ChatGPT">ChatGPT</option>
-      <option value="Gemini">Gemini</option>
-      <option value="Blackbox">Blackbox</option>
-      <option value="Claude">Claude</option>
-      <option value="Canva">Canva</option>
-    </select>
-
-    <label for="role">Peran AI</label>
-    <select id="role" onchange="handleSelection()">
-      <option value="Asisten Penulis">Asisten Penulis</option>
-      <option value="Content Creator">Content Creator</option>
-      <option value="Dosen Virtual">Dosen Virtual</option>
-      <option value="AI Developer Assistant">AI Developer Assistant</option>
-      <option value="Canva Prompt Expert">Canva Prompt Expert</option>
-    </select>
-
-    <label for="goal">Tujuan Prompt</label>
-    <input type="text" id="goal" placeholder="Misal: Buat artikel ilmiah, video edukasi, script coding, dsb" />
-
-    <label for="topic">Topik Utama</label>
-    <input type="text" id="topic" placeholder="Misal: Energi Terbarukan" />
-
-    <label for="style">Gaya Bahasa</label>
-    <input type="text" id="style" placeholder="Misal: Ilmiah, Persuasif, Ringan, Kreatif" />
-
-    <label for="format">Format Output</label>
-    <input type="text" id="format" placeholder="Misal: Artikel, Markdown, JSON, Video Script" />
-
-    <label for="length">Panjang / Durasi Output</label>
-    <input type="text" id="length" placeholder="Misal: 1000 kata, 3 menit, 5 halaman" />
-
-    <label for="tone">Nada Bahasa</label>
-    <input type="text" id="tone" placeholder="Misal: Formal, Santai, Lucu, Serius" />
-
-    <button onclick="generatePrompt()">Generate Prompt</button>
-
-    <pre id="output"></pre>
+<form id="promptForm" autocomplete="off" spellcheck="false">
+  <div class="row">
+    <div>
+      <label for="platform">Platform Tujuan</label>
+      <select id="platform" name="platform" required>
+        <option value="" disabled selected>-- Pilih Platform --</option>
+        <option value="ChatGPT">ChatGPT</option>
+        <option value="Gemini">Gemini</option>
+        <option value="Blackbox">Blackbox</option>
+        <option value="Claude">Claude</option>
+        <option value="Canva">Canva</option>
+      </select>
+    </div>
+    <div>
+      <label for="role">Peran AI</label>
+      <select id="role" name="role" required>
+        <option value="" disabled selected>-- Pilih Peran --</option>
+        <option value="Asisten Penulis">Asisten Penulis</option>
+        <option value="Content Creator">Content Creator</option>
+        <option value="Dosen Virtual">Dosen Virtual</option>
+        <option value="AI Developer Assistant">AI Developer Assistant</option>
+        <option value="Canva Prompt Expert">Canva Prompt Expert</option>
+      </select>
+    </div>
   </div>
 
-  <!-- Container Veo 3 (Kode 2) -->
-  <div id="veo3Container" class="container-veo hidden">
-    <header>
-      <h1>Veo 3 - Professional Prompt Generator</h1>
-      <p>Generate video prompt terbaik untuk Veo 3 AI dengan fitur lengkap</p>
-    </header>
+  <!-- Default Form Fields -->
+  <div id="defaultFields" style="margin-top:1.5rem;">
+    <label for="tujuanPrompt">Tujuan Prompt</label>
+    <input type="text" id="tujuanPrompt" name="tujuanPrompt" placeholder="Misal: Membantu menulis artikel..." />
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="platform-veo">Platform Tujuan</label>
-        <select id="platform-veo" onchange="handleSelection()">
-          <option value="ChatGPT">ChatGPT</option>
-          <option value="Gemini">Gemini</option>
-          <option value="Blackbox">Blackbox</option>
-          <option value="Claude">Claude</option>
-          <option value="Canva">Canva</option>
-        </select>
-      </div>
+    <label for="topikUtama" style="margin-top:1rem;">Topik Utama</label>
+    <input type="text" id="topikUtama" name="topikUtama" placeholder="Misal: Teknologi AI" />
 
-      <div class="form-group">
-        <label for="role-veo">Peran AI</label>
-        <select id="role-veo" onchange="handleSelection()">
-          <option value="Asisten Penulis">Asisten Penulis</option>
-          <option value="Content Creator">Content Creator</option>
-          <option value="Dosen Virtual">Dosen Virtual</option>
-          <option value="AI Developer Assistant">AI Developer Assistant</option>
-          <option value="Canva Prompt Expert">Canva Prompt Expert</option>
-        </select>
-      </div>
+    <label for="gayaBahasa" style="margin-top:1rem;">Gaya Bahasa</label>
+    <input type="text" id="gayaBahasa" name="gayaBahasa" placeholder="Misal: Formal, santai, persuasif..." />
 
-      <div class="form-group">
-        <label for="camera-style">Gaya Pengambilan Gambar</label>
-        <input type="text" id="camera-style" placeholder="Misal: Drone, Handheld, Cinematic" />
-      </div>
+    <label for="formatOutput" style="margin-top:1rem;">Format Output</label>
+    <input type="text" id="formatOutput" name="formatOutput" placeholder="Misal: Artikel, puisi, dialog..." />
 
-      <div class="form-group">
-        <label for="character">Karakter</label>
-        <input type="text" id="character" placeholder="Misal: Anak muda, ilmuwan, atlet" />
-      </div>
+    <label for="panjangOutput" style="margin-top:1rem;">Panjang / Durasi Output</label>
+    <input type="text" id="panjangOutput" name="panjangOutput" placeholder="Misal: 500 kata, 2 menit video..." />
 
-      <div class="form-group">
-        <label for="dialogue">Dialog / Narasi</label>
-        <textarea id="dialogue" rows="4" placeholder="Misal: Narasi edukasi tentang energi terbarukan"></textarea>
-      </div>
+    <label for="targetAudiens" style="margin-top:1rem;">Target Audiens</label>
+    <input type="text" id="targetAudiens" name="targetAudiens" placeholder="Misal: Pelajar, profesional IT..." />
 
-      <div class="form-group">
-        <label for="language">Bahasa</label>
-        <input type="text" id="language" placeholder="Misal: Indonesia, Inggris" />
-      </div>
+    <label for="tambahanKhusus" style="margin-top:1rem;">Tambahan Khusus</label>
+    <textarea id="tambahanKhusus" name="tambahanKhusus" placeholder="Informasi tambahan atau instruksi khusus"></textarea>
 
-      <div class="form-group">
-        <label for="accent">Logat / Dialek</label>
-        <input type="text" id="accent" placeholder="Misal: Jawa, Betawi, Inggris British" />
-      </div>
+    <!-- Conditional fields -->
+    <div id="conditionalFields" style="margin-top:1rem; display:none;">
+      <label for="bahasaPemrograman">Bahasa Pemrograman</label>
+      <input type="text" id="bahasaPemrograman" name="bahasaPemrograman" placeholder="Misal: Python, JavaScript" />
+
+      <label for="gayaVisual" style="margin-top:1rem; display:none;">Gaya Visual</label>
+      <input type="text" id="gayaVisual" name="gayaVisual" placeholder="Misal: Minimalis, flat design" style="display:none;" />
     </div>
-
-    <div class="actions">
-      <button onclick="generatePromptVeo()">Generate Video Prompt</button>
-      <button id="copy-btn" onclick="copyPrompt()">Copy Prompt</button>
-    </div>
-
-    <textarea id="output-prompt" readonly placeholder="Prompt akan muncul di sini..."></textarea>
   </div>
 
-  <script>
-    function handleSelection() {
-      // Ambil pilihan platform dan role dari container Prompt Forge
-      const platform = document.getElementById('platform').value;
-      const role = document.getElementById('role').value;
+  <!-- Custom Gemini + Content Creator Form -->
+  <div id="geminiContentCreatorForm" style="display:none; margin-top:1.5rem;">
+    <label for="ideInti">Ide Inti / Gagasan Utama</label>
+    <input type="text" id="ideInti" name="ideInti" placeholder="Masukkan ide inti atau gagasan utama" />
 
-      // Ambil juga pilihan platform dan role dari container Veo 3 (supaya konsisten)
-      const platformVeo = document.getElementById('platform-veo');
-      const roleVeo = document.getElementById('role-veo');
+    <label for="subjekPenampilan" style="margin-top:1rem;">Subjek & Penampilan</label>
+    <input type="text" id="subjekPenampilan" name="subjekPenampilan" placeholder="Deskripsikan subjek dan penampilan" />
 
-      // Sync dropdown Veo 3 dengan Prompt Forge
-      if (platformVeo.value !== platform) platformVeo.value = platform;
-      if (roleVeo.value !== role) roleVeo.value = role;
+    <label for="emosiPsikologi" style="margin-top:1rem;">Emosi & Psikologi</label>
+    <input type="text" id="emosiPsikologi" name="emosiPsikologi" placeholder="Ekspresikan emosi dan psikologi" />
 
-      // Kondisi switch
-      if (platform === "Gemini" && role === "Content Creator") {
-        document.getElementById('promptForgeContainer').classList.add('hidden');
-        document.getElementById('veo3Container').classList.remove('hidden');
+    <label for="tindakanUtama" style="margin-top:1rem;">Tindakan Utama</label>
+    <input type="text" id="tindakanUtama" name="tindakanUtama" placeholder="Apa tindakan utama yang terjadi?" />
 
-        // Enable Veo 3 styles, disable Prompt Forge styles
-        document.getElementById('style-promptforge').disabled = true;
-        document.getElementById('style-veo3').disabled = false;
+    <label for="lokasiSuasana" style="margin-top:1rem;">Lokasi & Suasana</label>
+    <input type="text" id="lokasiSuasana" name="lokasiSuasana" placeholder="Deskripsikan lokasi dan suasana" />
+
+    <label for="jenisShot" style="margin-top:1rem;">Jenis Shot & Gerakan Kamera</label>
+    <select id="jenisShot" name="jenisShot">
+      <option value="" disabled selected>-- Pilih Jenis Shot --</option>
+      <option value="Medium Close-up (Static)">Medium Close-up (Static)</option>
+      <option value="Close-up (Handheld)">Close-up (Handheld)</option>
+      <option value="Extreme Close-up (Focus on eyes)">Extreme Close-up (Focus on eyes)</option>
+      <option value="Wide Shot (Gimbal)">Wide Shot (Gimbal)</option>
+      <option value="Low-angle shot">Low-angle shot</option>
+      <option value="FPV Drone Shot">FPV Drone Shot</option>
+    </select>
+
+    <label for="gayaPencahayaan" style="margin-top:1rem;">Gaya Pencahayaan</label>
+    <input type="text" id="gayaPencahayaan" name="gayaPencahayaan" placeholder="Misal: Natural, dramatis" />
+
+    <label for="referensiArtistik" style="margin-top:1rem;">Referensi Artistik</label>
+    <input type="text" id="referensiArtistik" name="referensiArtistik" placeholder="Misal: Film noir, impresionisme" />
+  </div>
+
+  <div class="btn-group">
+    <button type="button" id="buatPromptBtn">Buat Prompt</button>
+    <button type="button" id="salinPromptBtn">Salin Prompt</button>
+  </div>
+
+  <pre id="promptOutput" aria-live="polite" aria-label="Output Prompt"></pre>
+</form>
+
+<script>
+  (function(){
+    const platformEl = document.getElementById('platform');
+    const roleEl = document.getElementById('role');
+    const defaultFieldsEl = document.getElementById('defaultFields');
+    const conditionalFieldsEl = document.getElementById('conditionalFields');
+    const bahasaPemrogramanEl = document.getElementById('bahasaPemrograman');
+    const gayaVisualEl = document.getElementById('gayaVisual');
+    const geminiFormEl = document.getElementById('geminiContentCreatorForm');
+    const buatPromptBtn = document.getElementById('buatPromptBtn');
+    const salinPromptBtn = document.getElementById('salinPromptBtn');
+    const promptOutput = document.getElementById('promptOutput');
+
+    function updateFormVisibility() {
+      const platform = platformEl.value;
+      const role = roleEl.value;
+
+      // Show Gemini + Content Creator custom form only if BOTH conditions true
+      if(platform === 'Gemini' && role === 'Content Creator') {
+        defaultFieldsEl.style.display = 'none';
+        geminiFormEl.style.display = 'block';
       } else {
-        document.getElementById('promptForgeContainer').classList.remove('hidden');
-        document.getElementById('veo3Container').classList.add('hidden');
+        defaultFieldsEl.style.display = 'block';
+        geminiFormEl.style.display = 'none';
+      }
 
-        // Enable Prompt Forge styles, disable Veo 3 styles
-        document.getElementById('style-promptforge').disabled = false;
-        document.getElementById('style-veo3').disabled = true;
+      // Show conditional fields only if peran adalah AI Developer Assistant atau Canva Prompt Expert
+      if(role === 'AI Developer Assistant' || role === 'Canva Prompt Expert') {
+        conditionalFieldsEl.style.display = 'block';
+      } else {
+        conditionalFieldsEl.style.display = 'none';
+      }
+
+      // Show Gaya Visual only if peran adalah Canva Prompt Expert
+      if(role === 'Canva Prompt Expert') {
+        gayaVisualEl.style.display = 'block';
+        // Label for Gaya Visual also needs to show
+        const labelGV = gayaVisualEl.previousElementSibling;
+        if(labelGV) labelGV.style.display = 'block';
+      } else {
+        gayaVisualEl.style.display = 'none';
+        const labelGV = gayaVisualEl.previousElementSibling;
+        if(labelGV) labelGV.style.display = 'none';
       }
     }
 
-    function generatePrompt() {
-      const platform = document.getElementById('platform').value;
-      const role = document.getElementById('role').value;
-      const goal = document.getElementById('goal').value.trim();
-      const topic = document.getElementById('topic').value.trim();
-      const style = document.getElementById('style').value.trim();
-      const format = document.getElementById('format').value.trim();
-      const length = document.getElementById('length').value.trim();
-      const tone = document.getElementById('tone').value.trim();
+    platformEl.addEventListener('change', updateFormVisibility);
+    roleEl.addEventListener('change', updateFormVisibility);
 
-      if (!goal || !topic) {
-        alert("Goal dan Topik wajib diisi!");
+    function buatPrompt() {
+      const platform = platformEl.value;
+      const role = roleEl.value;
+
+      if(!platform) {
+        alert("Silakan pilih Platform Tujuan terlebih dahulu.");
+        platformEl.focus();
+        return;
+      }
+      if(!role) {
+        alert("Silakan pilih Peran AI terlebih dahulu.");
+        roleEl.focus();
         return;
       }
 
-      const prompt = `Platform: ${platform}
-Peran: ${role}
-Tujuan: ${goal}
-Topik: ${topic}
-Gaya Bahasa: ${style}
-Format Output: ${format}
-Panjang/Durasi: ${length}
-Nada Bahasa: ${tone}
+      let prompt = `Platform: ${platform}\nPeran: ${role}\n\n`;
 
-Buat prompt yang spesifik dan kreatif sesuai parameter di atas.`;
+      if(platform === 'Gemini' && role === 'Content Creator') {
+        // Gemini + Content Creator custom form
+        const ideInti = document.getElementById('ideInti').value.trim();
+        const subjekPenampilan = document.getElementById('subjekPenampilan').value.trim();
+        const emosiPsikologi = document.getElementById('emosiPsikologi').value.trim();
+        const tindakanUtama = document.getElementById('tindakanUtama').value.trim();
+        const lokasiSuasana = document.getElementById('lokasiSuasana').value.trim();
+        const jenisShot = document.getElementById('jenisShot').value;
+        const gayaPencahayaan = document.getElementById('gayaPencahayaan').value.trim();
+        const referensiArtistik = document.getElementById('referensiArtistik').value.trim();
 
-      document.getElementById('output').textContent = prompt;
-    }
+        prompt +=
+`Ide Inti / Gagasan Utama:
+${ideInti || '-'}
 
-    function generatePromptVeo() {
-      const platform = document.getElementById('platform-veo').value;
-      const role = document.getElementById('role-veo').value;
-      const camera = document.getElementById('camera-style').value.trim();
-      const character = document.getElementById('character').value.trim();
-      const dialogue = document.getElementById('dialogue').value.trim();
-      const language = document.getElementById('language').value.trim();
-      const accent = document.getElementById('accent').value.trim();
+Subjek & Penampilan:
+${subjekPenampilan || '-'}
 
-      if (!dialogue) {
-        alert("Dialog / Narasi harus diisi!");
-        return;
+Emosi & Psikologi:
+${emosiPsikologi || '-'}
+
+Tindakan Utama:
+${tindakanUtama || '-'}
+
+Lokasi & Suasana:
+${lokasiSuasana || '-'}
+
+Jenis Shot & Gerakan Kamera:
+${jenisShot || '-'}
+
+Gaya Pencahayaan:
+${gayaPencahayaan || '-'}
+
+Referensi Artistik:
+${referensiArtistik || '-'}`;
+      } else {
+        // Default form
+        const tujuanPrompt = document.getElementById('tujuanPrompt').value.trim();
+        const topikUtama = document.getElementById('topikUtama').value.trim();
+        const gayaBahasa = document.getElementById('gayaBahasa').value.trim();
+        const formatOutput = document.getElementById('formatOutput').value.trim();
+        const panjangOutput = document.getElementById('panjangOutput').value.trim();
+        const targetAudiens = document.getElementById('targetAudiens').value.trim();
+        const tambahanKhusus = document.getElementById('tambahanKhusus').value.trim();
+
+        prompt +=
+`Tujuan Prompt:
+${tujuanPrompt || '-'}
+
+Topik Utama:
+${topikUtama || '-'}
+
+Gaya Bahasa:
+${gayaBahasa || '-'}
+
+Format Output:
+${formatOutput || '-'}
+
+Panjang / Durasi Output:
+${panjangOutput || '-'}
+
+Target Audiens:
+${targetAudiens || '-'}
+
+Tambahan Khusus:
+${tambahanKhusus || '-'}`;
+
+        if(role === 'AI Developer Assistant' || role === 'Canva Prompt Expert') {
+          const bahasaPemrograman = bahasaPemrogramanEl.value.trim();
+          prompt += `
+
+Bahasa Pemrograman:
+${bahasaPemrograman || '-'}`;
+        }
+        if(role === 'Canva Prompt Expert') {
+          const gayaVisual = gayaVisualEl.value.trim();
+          prompt += `
+
+Gaya Visual:
+${gayaVisual || '-'}`;
+        }
       }
 
-      const prompt = `Platform: ${platform}
-Role: ${role}
-Camera Style: ${camera}
-Character: ${character}
-Dialogue / Narrative: ${dialogue}
-Language: ${language}
-Accent: ${accent}
-
-Generate a professional video prompt for Veo 3 based on the above.`;
-
-      document.getElementById('output-prompt').value = prompt;
+      promptOutput.textContent = prompt;
+      promptOutput.scrollIntoView({behavior: 'smooth'});
     }
 
-    function copyPrompt() {
-      const textArea = document.getElementById('output-prompt');
-      textArea.select();
-      document.execCommand('copy');
-      alert('Prompt berhasil disalin ke clipboard!');
-    }
+    buatPromptBtn.addEventListener('click', buatPrompt);
 
-    // Initial setup
-    window.onload = () => {
-      handleSelection();
-    };
-  </script>
+    salinPromptBtn.addEventListener('click', () => {
+      const text = promptOutput.textContent;
+      if(!text.trim()) {
+        alert("Tidak ada prompt untuk disalin. Silakan buat prompt terlebih dahulu.");
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Prompt berhasil disalin ke clipboard!");
+      }, () => {
+        alert("Gagal menyalin prompt. Silakan coba lagi.");
+      });
+    });
+
+    // Initialize form visibility on load
+    updateFormVisibility();
+  })();
+</script>
+
 </body>
 </html>
