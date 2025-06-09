@@ -1,161 +1,313 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prompt Forge - AI Prompt Builder</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #f0f0f0;
-    }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem 5rem;
-    }
-    .container {
-      background: rgba(30, 30, 45, 0.95);
-      padding: 2.5rem 2rem;
-      border-radius: 16px;
-      max-width: 720px;
-      width: 100%;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 1.1px;
-      color: #ffdd57;
-      text-shadow: 1px 1px 4px rgba(255, 221, 87, 0.7);
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-    }
-    label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      color: #ddd;
-    }
-    select, input[type="text"], textarea {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 1.2rem;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-      background: #2c2c48;
-      color: #eee;
-      box-shadow: inset 2px 2px 8px rgba(0,0,0,0.7);
-      transition: all 0.25s ease;
-    }
-    select:focus, input:focus, textarea:focus {
-      outline: none;
-      background-color: #3a3a6e;
-      box-shadow: 0 0 10px #ffdd57;
-      color: #fff;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .hidden {
-      display: none;
-    }
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: flex-end;
-    }
-    .flex-grow {
-      flex: 1 1 220px;
-    }
-    button {
-      cursor: pointer;
-      background: #ffdd57;
-      color: #332f24;
-      font-weight: 700;
-      border: none;
-      padding: 0.85rem 1.5rem;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
-      box-shadow: 0 4px 12px rgba(255, 221, 87, 0.5);
-      transition: all 0.3s ease;
-    }
-    button:hover {
-      background-color: #ffca2c;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(255, 202, 44, 0.8);
-    }
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 3px 8px rgba(255, 202, 44, 0.6);
-    }
-    #promptResult {
-      margin-top: 1.6rem;
-      background: #1e1e2f;
-      padding: 1rem 1.2rem;
-      border-radius: 12px;
-      white-space: pre-wrap;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.95rem;
-      color: #ffeb99;
-      box-shadow: inset 2px 2px 8px rgba(255, 221, 87, 0.3);
-      max-height: 260px;
-      overflow-y: auto;
-    }
-    footer {
-      margin-top: auto;
-      padding: 1.5rem 1rem;
-      width: 100%;
-      text-align: center;
-      background: #1f1f2f;
-      color: #bbb;
-      font-size: 0.9rem;
-      box-shadow: 0 -3px 12px rgba(0,0,0,0.3);
-    }
-    footer a {
-      color: #ffdd57;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    @media (max-width: 600px) {
-      .container {
-        padding: 1.8rem 1rem;
-      }
-      .flex-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      button {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prompt Forge - AI Prompt Builder</title>
+<style>
+  /* Reset dasar */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem 6rem;
+  }
+
+  .container {
+    background: rgba(30, 30, 45, 0.95);
+    padding: 2.5rem 3rem;
+    border-radius: 16px;
+    max-width: 720px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    color: #ffdd57;
+    text-shadow: 1px 1px 4px rgba(255, 221, 87, 0.7);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: #ddd;
+  }
+
+  select, input[type="text"], textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.3rem;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    background: #2c2c48;
+    color: #eee;
+    box-shadow: inset 2px 2px 8px rgba(0,0,0,0.7);
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  select:focus, input[type="text"]:focus, textarea:focus {
+    background-color: #3a3a6e;
+    box-shadow: 0 0 10px #ffdd57;
+    outline: none;
+    color: #fff;
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  .hidden { display: none; }
+
+  .flex-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .flex-grow { flex: 1 1 220px; }
+
+  button {
+    cursor: pointer;
+    background: #ffdd57;
+    color: #332f24;
+    font-weight: 700;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 12px rgba(255, 221, 87, 0.5);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    user-select: none;
+  }
+
+  button:hover {
+    background-color: #ffca2c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255, 202, 44, 0.8);
+  }
+
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(255, 202, 44, 0.6);
+  }
+
+  #promptResult {
+    margin-top: 1.6rem;
+    background: #1e1e2f;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    color: #ffeb99;
+    box-shadow: inset 2px 2px 8px rgba(255, 221, 87, 0.3);
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  /* Media Query untuk HP */
+  @media (max-width: 768px) {
+    body { padding: 1rem 0.5rem 6rem; }
+    .container { padding: 2rem 1.5rem; }
+    h1 { font-size: 1.6rem; }
+    .flex-row { flex-direction: column; }
+    button { width: 100%; }
+  }
+
+  /* Footer keren */
+  footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 1rem;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    text-align: center;
+    font-size: 0.9rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.3);
+  }
+  footer a {
+    color: #ffdd57;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+</style>
 </head>
 <body>
-  <!-- Container utama -->
-  <div class="container">
-    <!-- Isi konten kamu (h1, form, dsb) tetap di sini -->
-    <!-- Tidak saya ulangi karena tidak berubah dari aslinya -->
-  </div>
 
-  <!-- Footer -->
-  <footer>
-    Dibuat dengan ❤️ oleh <a href="https://github.com/FandyDev" target="_blank">FandyDev</a> | Prompt Forge &copy; 2025
-  </footer>
+<div class="container" role="main" aria-label="Prompt Forge AI prompt builder">
+  <h1>🧠Prompt-Forge🧠</h1>
+
+  <label for="platform">Platform Tujuan</label>
+  <select id="platform">
+    <option>ChatGPT</option>
+    <option>Gemini</option>
+    <option>Blackbox</option>
+    <option>Claude</option>
+    <option>Canva</option>
+  </select>
+
+  <label for="role">Peran AI</label>
+  <select id="role">
+    <option>Asisten Penulis</option>
+    <option>Content Creator</option>
+    <option>Dosen Virtual</option>
+    <option>AI Developer Assistant</option>
+    <option>Canva Prompt Expert</option>
+  </select>
+
+  <form id="promptForm" novalidate>
+    <div id="defaultInputs">
+      <label for="goal">Tujuan Prompt</label>
+      <input id="goal" type="text" placeholder="Misal: Membuat artikel SEO" />
+
+      <label for="topic">Topik Utama</label>
+      <input id="topic" type="text" placeholder="Misal: Teknologi AI terbaru" />
+
+      <label for="style">Gaya Bahasa</label>
+      <input id="style" type="text" placeholder="Misal: Santai dan informatif" />
+
+      <label for="formatOutput">Format Output</label>
+      <input id="formatOutput" type="text" placeholder="Misal: Artikel, script, dll" />
+
+      <label for="length">Panjang / Durasi Output</label>
+      <input id="length" type="text" placeholder="Misal: 500 kata atau 5 menit" />
+
+      <label for="audience">Target Audiens</label>
+      <input id="audience" type="text" placeholder="Misal: Pelajar, profesional" />
+
+      <label for="special">Tambahan Khusus</label>
+      <textarea id="special" placeholder="Catatan tambahan (opsional)"></textarea>
+
+      <label for="progLang" class="hidden">Bahasa Pemrograman</label>
+      <input id="progLang" type="text" class="hidden" placeholder="Misal: Python, JavaScript" />
+
+      <label for="visualStyle" class="hidden">Gaya Visual</label>
+      <input id="visualStyle" type="text" class="hidden" placeholder="Misal: Minimalis, warna pastel" />
+    </div>
+
+    <div id="geminiContentCreatorForm" class="hidden">
+      <label for="coreIdea">Ide Inti / Gagasan Utama</label>
+      <input id="coreIdea" type="text"/>
+
+      <label for="subjectAppearance">Subjek & Penampilan</label>
+      <input id="subjectAppearance" type="text"/>
+
+      <label for="emotionPsychology">Emosi & Psikologi</label>
+      <input id="emotionPsychology" type="text"/>
+
+      <label for="mainAction">Tindakan Utama</label>
+      <input id="mainAction" type="text"/>
+
+      <label for="locationMood">Lokasi & Suasana</label>
+      <input id="locationMood" type="text"/>
+
+      <label for="shotType">Jenis Shot & Gerakan Kamera</label>
+      <select id="shotType">
+        <option>Medium Close-up (Static)</option>
+        <option>Close-up (Handheld)</option>
+        <option>Extreme Close-up (Focus on eyes)</option>
+        <option>Wide Shot (Gimbal)</option>
+        <option>Low-angle shot</option>
+        <option>FPV Drone Shot</option>
+      </select>
+
+      <label for="lightingStyle">Gaya Pencahayaan</label>
+      <input id="lightingStyle" type="text"/>
+
+      <label for="artisticRef">Referensi Artistik</label>
+      <input id="artisticRef" type="text"/>
+    </div>
+
+    <div class="flex-row">
+      <button type="button" id="createBtn">Buat Prompt</button>
+      <button type="button" id="copyBtn">Salin Prompt</button>
+    </div>
+  </form>
+
+  <pre id="promptResult" aria-live="polite"></pre>
+</div>
+
+<footer>
+  Dibuat dengan ❤️ oleh <a href="https://github.com/FandyAI" target="_blank">Prompt Forge Team</a>
+</footer>
+
+<script>
+  const ps = id => document.getElementById(id);
+  const platform = ps('platform'), role = ps('role');
+  const defaultInputs = ps('defaultInputs'), geminiForm = ps('geminiContentCreatorForm');
+  const progLang = ps('progLang'), visualStyle = ps('visualStyle');
+  const progLangLabel = document.querySelector('label[for="progLang"]');
+  const visualStyleLabel = document.querySelector('label[for="visualStyle"]');
+
+  function toggleFields(){
+    const r = role.value, p = platform.value;
+    if(r==='AI Developer Assistant' || r==='Canva Prompt Expert'){
+      progLangLabel.classList.remove('hidden'); progLang.classList.remove('hidden');
+    } else {
+      progLangLabel.classList.add('hidden'); progLang.classList.add('hidden'); progLang.value='';
+    }
+    if(r==='Canva Prompt Expert'){
+      visualStyleLabel.classList.remove('hidden'); visualStyle.classList.remove('hidden');
+    } else {
+      visualStyleLabel.classList.add('hidden'); visualStyle.classList.add('hidden'); visualStyle.value='';
+    }
+    if(p==='Gemini' && r==='Content Creator'){
+      defaultInputs.classList.add('hidden'); geminiForm.classList.remove('hidden');
+    } else {
+      defaultInputs.classList.remove('hidden'); geminiForm.classList.add('hidden');
+    }
+    ps('promptResult').textContent='';
+  }
+
+  function generatePrompt(){
+    let text = `Platform: ${platform.value}\nPeran: ${role.value}\n\n`;
+    if(platform.value==='Gemini' && role.value==='Content Creator'){
+      ['coreIdea','subjectAppearance','emotionPsychology','mainAction','locationMood','shotType','lightingStyle','artisticRef']
+        .forEach(key=>{
+          const el = ps(key);
+          text += `${el.previousElementSibling.textContent}: ${el.value.trim() || '(kosong)'}\n`;
+        });
+    } else {
+      ['Tujuan Prompt','Topik Utama','Gaya Bahasa','Format Output','Panjang / Durasi Output','Target Audiens','Tambahan Khusus']
+        .forEach((label, i)=>{
+          const id = ['goal','topic','style','formatOutput','length','audience','special'][i];
+          text += `${label}: ${ps(id).value.trim()||'(kosong)'}\n`;
+        });
+      if(progLang.value) text += `Bahasa Pemrograman: ${progLang.value.trim()}\n`;
+      if(visualStyle.value) text += `Gaya Visual: ${visualStyle.value.trim()}\n`;
+    }
+    return text;
+  }
+
+  platform.addEventListener('change', toggleFields);
+  role.addEventListener('change', toggleFields);
+
+  ps('createBtn').addEventListener('click', () => {
+    ps('promptResult').textContent = generatePrompt();
+  });
+
+  ps('copyBtn').addEventListener('click', () => {
+    const t = ps('promptResult').textContent.trim();
+    if(t){
+      navigator.clipboard.writeText(t).then(()=>alert('🎉 Prompt disalin!'));
+    } else alert('Buat prompt dulu ya bro.');
+  });
+
+  toggleFields();
+</script>
 </body>
 </html>
